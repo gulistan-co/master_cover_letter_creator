@@ -2,6 +2,10 @@
 
 Built on 300+ applications. Forensically extracted.
 
+## 📡 Deployment status
+
+This repository does **not** deploy automatically from this workspace. To make it live you must run one of the deployment flows below (GitHub Pages for the static front end, Render for the Node/AI backend) and point the UI at your hosted API via `window.API_BASE_URL` if you separate them. Until you do, everything runs locally only.
+
 ## 🚀 Quick Deploy to GitHub Pages (5 minutes)
 
 ### Step 1: Create GitHub Repository
