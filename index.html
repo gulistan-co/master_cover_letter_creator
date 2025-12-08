@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arc-Athena | Cover Letter Expert System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -15,7 +18,33 @@
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: radial-gradient(circle at 20% 20%, rgba(80, 115, 255, 0.08), transparent 30%),
+                        radial-gradient(circle at 80% 0%, rgba(157, 255, 232, 0.08), transparent 25%),
+                        linear-gradient(135deg, #05060a 0%, #0b0d14 50%, #06080f 100%);
+            color: #e7e8ec;
+        }
+
+        .title-font {
+            font-family: 'Playfair Display', 'Space Grotesk', serif;
+        }
+
+        .card-shell::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .card-shell::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 0.75rem;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -291,6 +320,9 @@
             orgInsight: ''
           });
 
+          const cardShell = "relative overflow-hidden border border-slate-800/70 bg-gradient-to-br from-slate-950/80 via-black/70 to-slate-900/60 rounded-xl shadow-[0_10px_40px_-25px_rgba(0,0,0,0.9)]";
+          const pillClass = "px-3 py-1 rounded-full border border-slate-800/70 bg-white/5 text-[11px] tracking-wide";
+
           const filteredSectors = useMemo(() => {
             if (!searchQuery) return SECTOR_ROUTING;
             return SECTOR_ROUTING.filter(s => 
@@ -448,64 +480,71 @@
           };
 
           return (
-            <div className="min-h-screen bg-black text-white font-sans">
-              {/* HEADER */}
-              <div className="border-b border-zinc-800 bg-zinc-950">
-                <div className="max-w-7xl mx-auto px-8 py-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h1 className="text-2xl font-light tracking-wider">ARC-ATHENA</h1>
-                      <p className="text-xs text-zinc-500 mt-1 tracking-wide">COVER LETTER EXPERT SYSTEM v2.0</p>
-                    </div>
-                    <div className="flex gap-2 text-xs">
-                      <div className="px-3 py-1 bg-zinc-900 border border-zinc-800 rounded">300+ APPLICATIONS</div>
-                      <div className="px-3 py-1 bg-zinc-900 border border-zinc-800 rounded">FORENSICALLY EXTRACTED</div>
+            <div className="min-h-screen text-slate-100 font-sans relative overflow-hidden">
+              <div className="pointer-events-none absolute inset-0 opacity-50" style={{backgroundImage:'radial-gradient(circle at 10% 20%, rgba(116,153,255,0.04), transparent 25%), radial-gradient(circle at 90% 10%, rgba(112,255,214,0.05), transparent 20%), linear-gradient(140deg, rgba(255,255,255,0.03), transparent 45%, rgba(255,255,255,0.02))'}}></div>
+              <div className="relative">
+                {/* HEADER */}
+                <div className="border-b border-slate-800/70 bg-black/60 backdrop-blur-xl">
+                  <div className="max-w-7xl mx-auto px-8 py-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="uppercase text-[11px] tracking-[0.3em] text-slate-500">cover letter engine</p>
+                        <h1 className="text-3xl title-font tracking-tight text-slate-50">Arc Athena v2.0</h1>
+                      </div>
+                      <div className="flex gap-2 text-xs">
+                        <div className={pillClass}>300+ Applications</div>
+                        <div className={pillClass}>Forensically Extracted</div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* MAIN NAV */}
-              <div className="border-b border-zinc-900 bg-black sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-8">
-                  <div className="flex gap-6">
-                    {[
-                      { id: 'architect', label: 'ARCHITECT', icon: Target },
-                      { id: 'arsenal', label: 'ARSENAL', icon: Zap },
-                      { id: 'rules', label: 'INVIOLABLE CODE', icon: Lock },
-                      { id: 'copilot', label: 'COPILOT', icon: Sparkles },
-                      { id: 'assembled', label: 'ASSEMBLED', icon: FileText }
-                    ].map(tab => (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`flex items-center gap-2 px-4 py-4 text-xs tracking-wider border-b-2 transition-all ${
-                          activeTab === tab.id
-                            ? 'border-white text-white'
-                            : 'border-transparent text-zinc-600 hover:text-zinc-400'
-                        }`}
-                      >
-                        {React.createElement(tab.icon, { size: 14 })}
-                        {tab.label}
-                      </button>
-                    ))}
+                {/* MAIN NAV */}
+                <div className="border-b border-slate-900/60 bg-black/50 backdrop-blur-md sticky top-0 z-50">
+                  <div className="max-w-7xl mx-auto px-8">
+                    <div className="flex gap-2 py-2">
+                      {[
+                        { id: 'architect', label: 'Architect', icon: Target },
+                        { id: 'arsenal', label: 'Arsenal', icon: Zap },
+                        { id: 'rules', label: 'Inviolable Code', icon: Lock },
+                        { id: 'copilot', label: 'Copilot', icon: Sparkles },
+                        { id: 'assembled', label: 'Assembled', icon: FileText }
+                      ].map(tab => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`flex items-center gap-2 px-4 py-3 text-xs tracking-widest uppercase rounded-full transition-all border ${
+                            activeTab === tab.id
+                              ? 'border-slate-400/70 bg-white/10 text-white shadow-[0_10px_30px_-20px_rgba(255,255,255,0.5)]'
+                              : 'border-transparent text-slate-500 hover:text-slate-200 hover:border-slate-700'
+                          }`}
+                        >
+                          {React.createElement(tab.icon, { size: 14 })}
+                          {tab.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* CONTENT */}
-              <div className="max-w-7xl mx-auto px-8 py-8">
+                {/* CONTENT */}
+                <div className="max-w-7xl mx-auto px-8 py-10 space-y-10">
                 
                 {activeTab === 'architect' && (
                   <div className="space-y-8">
                     {/* JD INTELLIGENCE ENGINE */}
-                    <div className="border border-zinc-800 bg-zinc-950 p-6">
+                    <div className={`${cardShell} p-6`}> 
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h2 className="text-sm tracking-widest text-zinc-400">JD INTELLIGENCE ENGINE</h2>
-                          <p className="text-xs text-zinc-600 mt-1">Paste job description. Get instant analysis and routing.</p>
+                          <div className="flex items-center gap-3">
+                            <span className="h-6 w-[2px] bg-gradient-to-b from-slate-200 to-slate-500 rounded-full"></span>
+                            <div>
+                              <h2 className="text-sm tracking-[0.32em] text-slate-300 uppercase">JD Intelligence Engine</h2>
+                              <p className="text-xs text-slate-500 mt-1">Paste JD ➝ precision routing with Arc Athena context.</p>
+                            </div>
+                          </div>
                         </div>
-                        <Sparkles size={20} className="text-zinc-700" />
+                        <Sparkles size={20} className="text-slate-400" />
                       </div>
 
                       <textarea
@@ -513,13 +552,13 @@
                         onChange={(e) => setJdText(e.target.value)}
                         placeholder="Paste the full job description here..."
                         rows={8}
-                        className="w-full bg-black border border-zinc-800 rounded px-4 py-3 text-sm text-white placeholder-zinc-700 focus:outline-none focus:border-zinc-700 resize-none mb-4 font-mono"
+                        className="w-full bg-black/40 border border-slate-800/70 rounded-lg px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 resize-none mb-4 font-mono shadow-inner"
                       />
 
                       <button
                         onClick={handleJDAnalysis}
                         disabled={!jdText.trim() || analysisLoading}
-                        className="w-full bg-white text-black py-4 text-sm tracking-wider font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-zinc-200 transition-all flex items-center justify-center gap-2"
+                        className="w-full bg-gradient-to-r from-slate-200 to-slate-400 text-black py-4 text-sm tracking-[0.24em] font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:brightness-110 transition-all flex items-center justify-center gap-2 rounded-lg shadow-[0_18px_40px_-30px_rgba(255,255,255,0.7)]"
                       >
                         <Play size={16} />
                         {analysisLoading ? 'ANALYZING...' : 'ANALYZE & AUTO-POPULATE'}
@@ -541,27 +580,27 @@
                           </div>
 
                           <div className="grid grid-cols-2 gap-4 text-xs">
-                            <div className="bg-black border border-zinc-800 p-4 rounded">
-                              <div className="text-zinc-600 mb-2">DETECTED SECTOR</div>
-                              <div className="text-white font-medium">{jdAnalysis.sector}</div>
+                            <div className="bg-black/30 border border-slate-800/60 p-4 rounded-lg shadow-inner">
+                              <div className="text-slate-500 mb-2">DETECTED SECTOR</div>
+                              <div className="text-slate-50 font-medium">{jdAnalysis.sector}</div>
                             </div>
-                            <div className="bg-black border border-zinc-800 p-4 rounded">
-                              <div className="text-zinc-600 mb-2">EXTRACTED ROLE</div>
-                              <div className="text-white font-medium">{jdAnalysis.role || 'Not detected'}</div>
+                            <div className="bg-black/30 border border-slate-800/60 p-4 rounded-lg shadow-inner">
+                              <div className="text-slate-500 mb-2">EXTRACTED ROLE</div>
+                              <div className="text-slate-50 font-medium">{jdAnalysis.role || 'Not detected'}</div>
                             </div>
-                            <div className="bg-black border border-zinc-800 p-4 rounded col-span-2">
-                              <div className="text-zinc-600 mb-2">EXTRACTED ORG</div>
-                              <div className="text-white font-medium">{jdAnalysis.org || 'Not detected'}</div>
+                            <div className="bg-black/30 border border-slate-800/60 p-4 rounded-lg col-span-2 shadow-inner">
+                              <div className="text-slate-500 mb-2">EXTRACTED ORG</div>
+                              <div className="text-slate-50 font-medium">{jdAnalysis.org || 'Not detected'}</div>
                             </div>
                             {jdAnalysis.orgInsight && (
-                              <div className="bg-black border border-zinc-800 p-4 rounded col-span-2">
-                                <div className="text-zinc-600 mb-2">DETECTED MISSION/INSIGHT</div>
-                                <div className="text-white font-medium text-xs leading-relaxed">{jdAnalysis.orgInsight}</div>
+                              <div className="bg-black/30 border border-slate-800/60 p-4 rounded-lg col-span-2 shadow-inner">
+                                <div className="text-slate-500 mb-2">DETECTED MISSION/INSIGHT</div>
+                                <div className="text-slate-50 font-medium text-xs leading-relaxed">{jdAnalysis.orgInsight}</div>
                               </div>
                             )}
                           </div>
 
-                          <p className="text-xs text-zinc-600 mt-4 italic">
+                          <p className="text-xs text-slate-500 mt-4 italic">
                             Fields auto-populated below. Review and refine before assembling.
                           </p>
                         </div>
@@ -571,15 +610,15 @@
                     {/* Sector Selection */}
                     <div>
                       <div className="mb-4 flex items-center justify-between">
-                        <h2 className="text-sm tracking-widest text-zinc-400">SELECT SECTOR</h2>
+                        <h2 className="text-sm tracking-[0.32em] text-slate-300 uppercase">Select Sector</h2>
                         <div className="relative">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
                           <input
                             type="text"
                             placeholder="Search sectors..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="bg-zinc-950 border border-zinc-800 rounded px-10 py-2 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-700"
+                            className="bg-black/40 border border-slate-800/70 rounded-full px-10 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 shadow-inner"
                           />
                         </div>
                       </div>
@@ -589,10 +628,10 @@
                           <button
                             key={sector.sector}
                             onClick={() => setSelectedSector(sector.sector)}
-                            className={`p-4 text-left text-sm border transition-all ${
+                            className={`p-4 text-left text-sm border transition-all rounded-lg backdrop-blur-sm ${
                               selectedSector === sector.sector
-                                ? 'bg-white text-black border-white'
-                                : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700'
+                                ? 'bg-white/90 text-black border-white shadow-[0_20px_50px_-35px_rgba(255,255,255,0.8)]'
+                                : 'bg-black/40 text-slate-300 border-slate-800/70 hover:border-slate-600 hover:text-white'
                             }`}
                           >
                             {sector.sector}
@@ -603,36 +642,36 @@
 
                     {/* Customization Inputs */}
                     {selectedSector && (
-                      <div className="border border-zinc-800 bg-zinc-950 p-6">
-                        <h3 className="text-xs tracking-widest text-zinc-400 mb-4">CUSTOMIZATION</h3>
+                      <div className={`${cardShell} p-6`}>
+                        <h3 className="text-xs tracking-[0.32em] text-slate-300 mb-4 uppercase">Customization</h3>
                         <div className="space-y-4">
                           <div>
-                            <label className="text-xs text-zinc-500 mb-2 block">ROLE TITLE</label>
+                            <label className="text-xs text-slate-500 mb-2 block">ROLE TITLE</label>
                             <input
                               type="text"
                               value={customizations.role}
                               onChange={(e) => setCustomizations({...customizations, role: e.target.value})}
-                              className="w-full bg-black border border-zinc-800 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-700"
+                              className="w-full bg-black/40 border border-slate-800/70 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-slate-500 shadow-inner"
                               placeholder="e.g., Senior Program Manager"
                             />
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-500 mb-2 block">ORGANIZATION</label>
+                            <label className="text-xs text-slate-500 mb-2 block">ORGANIZATION</label>
                             <input
                               type="text"
                               value={customizations.org}
                               onChange={(e) => setCustomizations({...customizations, org: e.target.value})}
-                              className="w-full bg-black border border-zinc-800 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-700"
+                              className="w-full bg-black/40 border border-slate-800/70 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-slate-500 shadow-inner"
                               placeholder="e.g., OpenAI"
                             />
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-500 mb-2 block">ORG INSIGHT (1-2 sentences)</label>
+                            <label className="text-xs text-slate-500 mb-2 block">ORG INSIGHT (1-2 sentences)</label>
                             <textarea
                               value={customizations.orgInsight}
                               onChange={(e) => setCustomizations({...customizations, orgInsight: e.target.value})}
                               rows={3}
-                              className="w-full bg-black border border-zinc-800 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-700 resize-none"
+                              className="w-full bg-black/40 border border-slate-800/70 rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-slate-500 resize-none shadow-inner"
                               placeholder="e.g., OpenAI's commitment to safety-first AI development..."
                             />
                           </div>
@@ -642,8 +681,8 @@
 
                     {/* Routing Preview */}
                     {currentRouting && (
-                      <div className="border border-zinc-800 bg-zinc-950 p-6">
-                        <h3 className="text-xs tracking-widest text-zinc-400 mb-4">ROUTING CONFIGURATION</h3>
+                      <div className={`${cardShell} p-6`}>
+                        <h3 className="text-xs tracking-[0.32em] text-slate-300 mb-4 uppercase">Routing Configuration</h3>
                         <div className="grid grid-cols-2 gap-4 text-xs mb-6">
                           <div className="space-y-2">
                             {[
@@ -653,9 +692,9 @@
                               ['GPCA Body', currentRouting.gpcaBody],
                               ['VV Body', currentRouting.vvBody]
                             ].map(([label, value]) => (
-                              <div key={label} className="flex justify-between py-2 border-b border-zinc-900">
-                                <span className="text-zinc-600">{label}:</span>
-                                <span className="text-white font-mono">{value}</span>
+                              <div key={label} className="flex justify-between py-2 border-b border-slate-900/70">
+                                <span className="text-slate-500">{label}:</span>
+                                <span className="text-slate-100 font-mono">{value}</span>
                               </div>
                             ))}
                           </div>
@@ -689,29 +728,29 @@
                 {activeTab === 'arsenal' && (
                   <div className="space-y-8">
                     <div>
-                      <h2 className="text-sm tracking-widest text-zinc-400 mb-4">THE KICKER BANK</h2>
+                      <h2 className="text-sm tracking-[0.32em] text-slate-300 mb-4 uppercase">The Kicker Bank</h2>
                       <div className="space-y-3">
                         {KICKERS.map(kicker => (
-                          <div key={kicker.code} className="border border-zinc-800 bg-zinc-950 p-4 hover:border-zinc-700 transition-all">
+                          <div key={kicker.code} className={`${cardShell} p-4 hover:border-slate-600 transition-all`}>
                             <div className="flex items-start justify-between mb-2">
-                              <code className="text-xs text-zinc-500 font-mono">{kicker.code}</code>
-                              <button className="text-zinc-600 hover:text-white" onClick={() => navigator.clipboard.writeText(kicker.text)}>
+                              <code className="text-xs text-slate-500 font-mono">{kicker.code}</code>
+                              <button className="text-slate-500 hover:text-white" onClick={() => navigator.clipboard.writeText(kicker.text)}>
                                 <Copy size={14} />
                               </button>
                             </div>
                             <p className="text-sm leading-relaxed mb-2">{kicker.text}</p>
-                            <p className="text-xs text-zinc-600">{kicker.bestFor}</p>
+                            <p className="text-xs text-slate-500">{kicker.bestFor}</p>
                           </div>
                         ))}
                       </div>
                     </div>
 
                     <div>
-                      <h2 className="text-sm tracking-widest text-zinc-400 mb-4">SACRED VOCABULARY</h2>
-                      <div className="border border-zinc-800 bg-zinc-950 p-4">
+                      <h2 className="text-sm tracking-[0.32em] text-slate-300 mb-4 uppercase">Sacred Vocabulary</h2>
+                      <div className={`${cardShell} p-4`}>
                         <div className="flex flex-wrap gap-2">
                           {SACRED_VOCAB.map(phrase => (
-                            <span key={phrase} className="px-3 py-1 bg-black border border-zinc-800 text-xs text-zinc-400 rounded">
+                            <span key={phrase} className="px-3 py-1 bg-black/40 border border-slate-800/70 text-xs text-slate-200 rounded-full">
                               {phrase}
                             </span>
                           ))}
@@ -720,11 +759,11 @@
                     </div>
 
                     <div>
-                      <h2 className="text-sm tracking-widest text-zinc-400 mb-4">FORBIDDEN PHRASES</h2>
-                      <div className="border border-zinc-800 bg-zinc-950 p-4">
+                      <h2 className="text-sm tracking-[0.32em] text-slate-300 mb-4 uppercase">Forbidden Phrases</h2>
+                      <div className={`${cardShell} p-4`}>
                         <div className="flex flex-wrap gap-2">
                           {FORBIDDEN_PHRASES.map(phrase => (
-                            <span key={phrase} className="px-3 py-1 bg-red-950/30 border border-red-900/50 text-xs text-red-500 rounded line-through">
+                            <span key={phrase} className="px-3 py-1 bg-red-950/30 border border-red-900/50 text-xs text-red-400 rounded-full line-through">
                               {phrase}
                             </span>
                           ))}
@@ -736,31 +775,31 @@
 
                 {activeTab === 'rules' && (
                   <div>
-                    <h2 className="text-sm tracking-widest text-zinc-400 mb-6">THE INVIOLABLE CODE</h2>
+                    <h2 className="text-sm tracking-[0.32em] text-slate-300 mb-6 uppercase">The Inviolable Code</h2>
                     <div className="space-y-4">
                       {RULES.map((rule, idx) => (
-                        <div key={idx} className="border border-zinc-800 bg-zinc-950 p-6 flex items-start gap-4">
+                        <div key={idx} className={`${cardShell} p-6 flex items-start gap-4`}>
                           <div className={`px-3 py-1 text-xs font-mono ${
-                            rule.severity === 'CRITICAL' 
+                            rule.severity === 'CRITICAL'
                               ? 'bg-red-950/30 text-red-500 border border-red-900/50'
                               : 'bg-yellow-950/30 text-yellow-500 border border-yellow-900/50'
-                          } rounded`}>
+                          } rounded-full`}> 
                             {rule.severity}
                           </div>
                           <div className="flex-1">
                             <h3 className="text-sm font-medium mb-2">{rule.rule}</h3>
-                            <p className="text-sm text-zinc-500">{rule.desc}</p>
+                            <p className="text-sm text-slate-400">{rule.desc}</p>
                           </div>
                         </div>
                       ))}
                     </div>
 
-                    <div className="mt-8 border border-zinc-800 bg-zinc-950 p-6">
-                      <h3 className="text-xs tracking-widest text-zinc-400 mb-4">THE 10% RULE</h3>
-                      <p className="text-sm text-zinc-400 leading-relaxed mb-4">
+                    <div className={`mt-8 ${cardShell} p-6`}>
+                      <h3 className="text-xs tracking-[0.32em] text-slate-300 mb-4 uppercase">The 10% Rule</h3>
+                      <p className="text-sm text-slate-400 leading-relaxed mb-4">
                         90% of text comes from anchors. Only customize:
                       </p>
-                      <ul className="space-y-2 text-sm text-zinc-500">
+                      <ul className="space-y-2 text-sm text-slate-300">
                         <li className="flex items-start gap-2">
                           <ChevronRight size={16} className="mt-0.5" />
                           <span>The FINAL CLAUSE of 2-3 sentences (transfer sentences)</span>
@@ -783,13 +822,13 @@
                 )}
 
                 {activeTab === 'copilot' && (
-                  <div className="space-y-6">
+                    <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-sm tracking-widest text-zinc-400">ARC ATHENA COPILOT</h2>
-                        <p className="text-xs text-zinc-600 mt-1">Context-aware assistant that enforces the Inviolable Code.</p>
+                        <h2 className="text-sm tracking-[0.32em] text-slate-300 uppercase">Arc Athena Copilot</h2>
+                        <p className="text-xs text-slate-500 mt-1">Context-aware assistant that enforces the Inviolable Code.</p>
                       </div>
-                      <div className="text-xs text-zinc-500">Mode</div>
+                      <div className="text-xs text-slate-500">Mode</div>
                     </div>
 
                     <div className="flex gap-3 text-xs">
@@ -801,10 +840,10 @@
                         <button
                           key={option.id}
                           onClick={() => setChatMode(option.id)}
-                          className={`px-4 py-2 border rounded transition-all ${
+                          className={`px-4 py-2 border rounded-full text-[11px] tracking-[0.24em] uppercase transition-all ${
                             chatMode === option.id
-                              ? 'border-white text-white'
-                              : 'border-zinc-800 text-zinc-500 hover:text-white'
+                              ? 'border-slate-300 text-white bg-white/10 shadow-[0_10px_30px_-25px_rgba(255,255,255,0.7)]'
+                              : 'border-slate-800/80 text-slate-500 hover:text-white hover:border-slate-600'
                           }`}
                         >
                           {option.label}
@@ -812,24 +851,24 @@
                       ))}
                     </div>
 
-                    <div className="border border-zinc-800 bg-zinc-950 p-4 h-96 overflow-y-auto space-y-3">
+                    <div className={`${cardShell} p-4 h-96 overflow-y-auto space-y-3`}>
                       {chatMessages.length === 0 ? (
-                        <div className="text-sm text-zinc-600">No messages yet. Start with a question or paste guidance.</div>
+                        <div className="text-sm text-slate-500">No messages yet. Start with a question or paste guidance.</div>
                       ) : (
                         chatMessages.map((msg, idx) => (
                           <div
                             key={idx}
-                            className={`p-3 rounded ${
-                              msg.role === 'assistant' ? 'bg-zinc-900 text-zinc-200' : 'bg-black text-white border border-zinc-800'
-                            }`}
+                            className={`p-3 rounded-lg border ${
+                              msg.role === 'assistant' ? 'bg-slate-900/70 text-slate-100 border-slate-800/70' : 'bg-black/40 text-white border-slate-800/70'
+                            } shadow-inner`}
                           >
-                            <div className="text-[10px] uppercase tracking-widest text-zinc-500 mb-1">{msg.role}</div>
+                            <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">{msg.role}</div>
                             <div className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</div>
                           </div>
                         ))
                       )}
                       {chatLoading && (
-                        <div className="text-xs text-zinc-500">Copilot thinking...</div>
+                        <div className="text-xs text-slate-500">Copilot thinking...</div>
                       )}
                     </div>
 
@@ -838,14 +877,14 @@
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                         rows={3}
-                        className="w-full bg-black border border-zinc-800 rounded px-4 py-3 text-sm text-white placeholder-zinc-700 focus:outline-none focus:border-zinc-700 resize-none"
+                        className="w-full bg-black/40 border border-slate-800/70 rounded-lg px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 resize-none shadow-inner"
                         placeholder="Ask about routing, JD interpretation, or surgical edits."
                       />
                       <div className="flex justify-end">
                         <button
                           onClick={sendChatMessage}
                           disabled={chatLoading || !chatInput.trim()}
-                          className="px-4 py-2 bg-white text-black text-xs tracking-wider hover:bg-zinc-200 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                          className="px-5 py-2 bg-gradient-to-r from-slate-200 to-slate-400 text-black text-xs tracking-[0.24em] rounded-full hover:brightness-110 transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_16px_40px_-30px_rgba(255,255,255,0.7)]"
                         >
                           {chatLoading ? 'SENDING...' : 'SEND'}
                         </button>
@@ -859,25 +898,25 @@
                     {assembledLetter ? (
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                          <h2 className="text-sm tracking-widest text-zinc-400">ASSEMBLED LETTER</h2>
+                          <h2 className="text-sm tracking-[0.32em] text-slate-300 uppercase">Assembled Letter</h2>
                           <div className="flex gap-2">
                             <button
                               onClick={copyToClipboard}
-                              className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-xs tracking-wider hover:bg-zinc-800 transition-all flex items-center gap-2"
+                              className="px-4 py-2 bg-black/40 border border-slate-800/70 text-xs tracking-[0.2em] rounded hover:border-slate-500 transition-all flex items-center gap-2"
                             >
                               <Copy size={14} />
                               COPY
                             </button>
                             <button
                               onClick={downloadLetter}
-                              className="px-4 py-2 bg-white text-black text-xs tracking-wider hover:bg-zinc-200 transition-all flex items-center gap-2"
+                              className="px-4 py-2 bg-gradient-to-r from-slate-200 to-slate-400 text-black text-xs tracking-[0.2em] rounded hover:brightness-110 transition-all flex items-center gap-2 shadow-[0_16px_40px_-30px_rgba(255,255,255,0.7)]"
                             >
                               <Download size={14} />
                               DOWNLOAD
                             </button>
                             <button
                               onClick={() => setAssembledLetter('')}
-                              className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-xs tracking-wider hover:bg-zinc-800 transition-all flex items-center gap-2"
+                              className="px-4 py-2 bg-black/40 border border-slate-800/70 text-xs tracking-[0.2em] rounded hover:border-slate-500 transition-all flex items-center gap-2"
                             >
                               <RotateCcw size={14} />
                               RESET
@@ -885,14 +924,14 @@
                           </div>
                         </div>
 
-                        <div className="border border-zinc-800 bg-zinc-950 p-8">
-                          <pre className="text-sm leading-relaxed text-zinc-300 whitespace-pre-wrap font-sans">
+                        <div className={`${cardShell} p-8`}>
+                          <pre className="text-sm leading-relaxed text-slate-100 whitespace-pre-wrap font-sans">
                             {assembledLetter}
                           </pre>
                         </div>
 
-                        <div className="border border-zinc-800 bg-zinc-950 p-6">
-                          <h3 className="text-xs tracking-widest text-zinc-400 mb-4">QUALITY CHECKLIST</h3>
+                        <div className={`${cardShell} p-6`}>
+                          <h3 className="text-xs tracking-[0.32em] text-slate-300 mb-4 uppercase">Quality Checklist</h3>
                           <div className="space-y-2 text-sm">
                             {[
                               "One page maximum",
@@ -901,8 +940,8 @@
                               "No sentences start with 'At' or 'When'",
                               "Sacred vocabulary included"
                             ].map((item, idx) => (
-                              <div key={idx} className="flex items-center gap-2 text-zinc-500">
-                                <CheckCircle2 size={16} className="text-zinc-700" />
+                              <div key={idx} className="flex items-center gap-2 text-slate-400">
+                                <CheckCircle2 size={16} className="text-slate-500" />
                                 {item}
                               </div>
                             ))}
@@ -910,9 +949,9 @@
                         </div>
                       </div>
                     ) : (
-                      <div className="border border-zinc-800 bg-zinc-950 p-12 text-center">
-                        <FileText size={48} className="mx-auto mb-4 text-zinc-800" />
-                        <p className="text-zinc-600 text-sm">No letter assembled yet. Go to ARCHITECT to build one.</p>
+                      <div className={`${cardShell} p-12 text-center`}>
+                        <FileText size={48} className="mx-auto mb-4 text-slate-700" />
+                        <p className="text-slate-500 text-sm">No letter assembled yet. Go to ARCHITECT to build one.</p>
                       </div>
                     )}
                   </div>
@@ -920,9 +959,9 @@
               </div>
 
               {/* FOOTER */}
-              <div className="border-t border-zinc-900 bg-black mt-12">
+              <div className="border-t border-slate-900/70 bg-black/60 backdrop-blur mt-12">
                 <div className="max-w-7xl mx-auto px-8 py-6">
-                  <p className="text-xs text-zinc-600 tracking-wide">
+                  <p className="text-xs text-slate-500 tracking-[0.2em] uppercase">
                     ARC-ATHENA PROTOCOL v2.0 | DECEMBER 2025 | BUILT ON 300+ APPLICATIONS | FORENSICALLY EXTRACTED
                   </p>
                 </div>
