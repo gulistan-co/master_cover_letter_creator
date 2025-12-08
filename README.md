@@ -62,6 +62,7 @@ Once deployed:
 - Auto-extracts: Role, Organization, Sector, Mission
 - Confidence scoring (HIGH/MEDIUM/LOW)
 - 130+ sector keywords across 13 categories
+- Optional OpenAI-backed JD parsing via `/api/jd-analyze` with fallback to the local keyword engine
 
 ### Complete Module System
 - **13 Sectors**: Climate/ESG, AI/Tech, Partnerships, Program Mgmt, Operations, Think Tank, Human Rights, Impact Investing, Communications, Membership, Research/Strategy, Fintech, Grants/Dev
@@ -112,6 +113,13 @@ Once deployed:
 - One-click copy/download
 - Mobile responsive
 - Notion-embeddable
+- Copilot tab for in-app ChatGPT constrained by Arc Athena rules
+
+## 🖥 Local Server
+
+1. Set `OPENAI_API_KEY` in your environment for AI-backed features.
+2. Run `npm install` once.
+3. Start the backend with `npm start` and open `index.html` in the same root (served statically by `server.js`).
 
 ## 📄 License
 
