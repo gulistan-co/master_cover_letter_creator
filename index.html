@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arc-Athena | Cover Letter Expert System</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        // Lucide icons as simple SVG components
+        const Target = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+            </svg>
+        );
+        const Zap = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+        );
+        const Lock = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+        );
+        const FileText = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+            </svg>
+        );
+        const Sparkles = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
+            </svg>
+        );
+        const Search = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+        );
+        const Copy = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+        );
+        const Download = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+        );
+        const RotateCcw = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+        );
+        const Play = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+        );
+        const CheckCircle2 = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+            </svg>
+        );
+        const ChevronRight = ({ size = 24, ...props }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        );
+
+        // SECTOR ROUTING
+        const SECTOR_ROUTING = [
+          { sector: "Climate/ESG", opening: "OPEN-CV", thesis: "THESIS-C", bridge: "BRIDGE-C", gpcaOpen: "GPCA-O-A", gpcaBody: "GPCA-ESG", gpcaClose: "GPCA-C-A", gpcaXfer: "GPCA-X-B", vvOpen: "VV-O-A", vvBody: "VV-PORT+TECH", vvXfer: "VV-X-A", execPara: "Optional", kicker: "KICK-E", synthesis: "PATTERN-D" },
+          { sector: "AI/Tech", opening: "OPEN-STD", thesis: "THESIS-A", bridge: "BRIDGE-A", gpcaOpen: "GPCA-O-B", gpcaBody: "GPCA-AI-TECH", gpcaClose: "GPCA-C-A", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-B", vvBody: "VV-TECH", vvXfer: "VV-X-A", execPara: "Optional", kicker: "KICK-B", synthesis: "PATTERN-C" },
+          { sector: "Partnerships/BD", opening: "OPEN-STD", thesis: "THESIS-A", bridge: "BRIDGE-A", gpcaOpen: "GPCA-O-A", gpcaBody: "GPCA-PARTNERSHIPS", gpcaClose: "GPCA-C-A", gpcaXfer: "GPCA-X-B", vvOpen: "VV-O-A", vvBody: "VV-CRISIS", vvXfer: "VV-X-A", execPara: "Yes", kicker: "KICK-A", synthesis: "PATTERN-A" },
+          { sector: "Program Mgmt", opening: "OPEN-CV", thesis: "THESIS-B", bridge: "BRIDGE-C", gpcaOpen: "GPCA-O-A", gpcaBody: "GPCA-STRATEGY", gpcaClose: "GPCA-C-B", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-B", vvBody: "VV-PROGRAM", vvXfer: "VV-X-B", execPara: "Optional", kicker: "KICK-C", synthesis: "PATTERN-A" },
+          { sector: "Operations", opening: "OPEN-STD", thesis: "THESIS-A", bridge: "BRIDGE-A", gpcaOpen: "GPCA-O-C", gpcaBody: "GPCA-OPERATIONS", gpcaClose: "GPCA-C-B", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-A", vvBody: "VV-CRISIS", vvXfer: "VV-X-A", execPara: "No", kicker: "KICK-D", synthesis: "PATTERN-A" },
+          { sector: "Think Tank/Policy", opening: "OPEN-CV", thesis: "THESIS-B", bridge: "BRIDGE-B", gpcaOpen: "GPCA-O-A", gpcaBody: "GPCA-STRATEGY", gpcaClose: "GPCA-C-A", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-A", vvBody: "VV-CRISIS", vvXfer: "VV-X-B", execPara: "Yes", kicker: "KICK-C", synthesis: "PATTERN-E" },
+          { sector: "Human Rights", opening: "OPEN-CV", thesis: "THESIS-B", bridge: "BRIDGE-C", gpcaOpen: "GPCA-O-A", gpcaBody: "GPCA-STRATEGY", gpcaClose: "GPCA-C-A", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-A", vvBody: "VV-PORT+TECH", vvXfer: "VV-X-B", execPara: "Yes", kicker: "KICK-C", synthesis: "PATTERN-C" },
+          { sector: "Impact Investing", opening: "OPEN-STD", thesis: "THESIS-A", bridge: "BRIDGE-A", gpcaOpen: "GPCA-O-A", gpcaBody: "GPCA-ESG", gpcaClose: "GPCA-C-A", gpcaXfer: "GPCA-X-B", vvOpen: "VV-O-A", vvBody: "VV-CRISIS", vvXfer: "VV-X-A", execPara: "Optional", kicker: "KICK-A", synthesis: "PATTERN-A" },
+          { sector: "Communications", opening: "OPEN-STD", thesis: "THESIS-A", bridge: "BRIDGE-A", gpcaOpen: "GPCA-O-B", gpcaBody: "GPCA-PARTNERSHIPS", gpcaClose: "GPCA-C-B", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-A", vvBody: "VV-COMMS", vvXfer: "VV-X-A", execPara: "Yes", kicker: "KICK-B", synthesis: "PATTERN-B" },
+          { sector: "Membership", opening: "OPEN-STD", thesis: "THESIS-A", bridge: "BRIDGE-A", gpcaOpen: "GPCA-O-B", gpcaBody: "GPCA-PARTNERSHIPS", gpcaClose: "GPCA-C-A", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-A", vvBody: "VV-CRISIS", vvXfer: "VV-X-A", execPara: "Optional", kicker: "KICK-A", synthesis: "PATTERN-A" },
+          { sector: "Research/Strategy", opening: "OPEN-CV", thesis: "THESIS-B", bridge: "BRIDGE-B", gpcaOpen: "GPCA-O-B", gpcaBody: "GPCA-STRATEGY", gpcaClose: "GPCA-C-A", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-B", vvBody: "VV-TECH", vvXfer: "VV-X-A", execPara: "Optional", kicker: "KICK-B", synthesis: "PATTERN-C" },
+          { sector: "Fintech", opening: "OPEN-STD", thesis: "THESIS-A", bridge: "BRIDGE-A", gpcaOpen: "GPCA-O-B", gpcaBody: "GPCA-PARTNERSHIPS", gpcaClose: "GPCA-C-B", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-A", vvBody: "VV-CRISIS", vvXfer: "VV-X-A", execPara: "No", kicker: "KICK-A", synthesis: "PATTERN-A" },
+          { sector: "Grants/Dev", opening: "OPEN-STD", thesis: "THESIS-C", bridge: "BRIDGE-C", gpcaOpen: "GPCA-O-A", gpcaBody: "GPCA-STRATEGY", gpcaClose: "GPCA-C-A", gpcaXfer: "GPCA-X-A", vvOpen: "VV-O-B", vvBody: "VV-PROGRAM", vvXfer: "VV-X-B", execPara: "Optional", kicker: "KICK-C", synthesis: "PATTERN-E" }
+        ];
+
+        // SENTENCE ANCHORS
+        const SENTENCE_ANCHORS = {
+          "OPEN-STD": "Please accept this letter as an application for the [ROLE] position at [ORG].",
+          "OPEN-CV": "Please accept this letter and the attached curriculum vitae as an application for the [ROLE] position at [ORG].",
+          "OPEN-RES": "Please accept this letter and the attached resume as an application for the [ROLE] position at [ORG].",
+          "THESIS-A": "My educational background and career in high-stakes initiatives have equipped me with the analytical acumen to [thrive in creative, results-driven teams / rapidly mobilize resources for lasting value creation / drive innovation in complex organizational environments].",
+          "THESIS-B": "My academic credentials, including a B.A. in Political Science from UC Berkeley and a Master of Laws in Human Rights from the University of Galway, have equipped me with the [analytical rigor/strategic acumen/systems-thinking fluency] to [ROLE-SPECIFIC OUTCOME].",
+          "THESIS-C": "My career across impact-focused initiatives has equipped me to engage with global stakeholders and manage complex programming with global reach.",
+          "THESIS-D": "This systems-thinking fluency will prove invaluable in [this role / shaping how [ORG] engages with [DOMAIN]].",
+          "BRIDGE-A": "This experience positions me to unlock value across [ORG]'s [STRATEGIC PRIORITY].",
+          "BRIDGE-B": "I thrive where intellectual agility aligns institutions, ideas, and intent.",
+          "BRIDGE-C": "This multidisciplinary background positions me to advance [ORG]'s mission to [MISSION].",
+          "BRIDGE-D": "Where others see complexity across disparate stakeholders and sectors, I see an endless array of opportunities to [shape/advance/forge] [ORG]'s [STRATEGIC PRIORITY].",
+          "GPCA-O-A": "As Manager at the Global Private Capital Association, I served as the bridge between the Executive team and its vast ecosystem of over 300 firms [to drive private capital investment across emerging markets / managing over $2T in assets].",
+          "GPCA-O-B": "As Manager at the Global Private Capital Association, I served as the primary point of contact for an ecosystem of over 300 member firms collectively managing more than $2T in assets.",
+          "GPCA-O-C": "As Manager at the Global Private Capital Association, I engaged with 300+ member firms managing over $2T in assets.",
+          "GPCA-PARTNERSHIPS": "I represented the organization at key industry convenings and leveraged CRM insights to inform engagement strategy. This entailed providing seamless service delivery to existing partners and engaging prospects by highlighting unique, firm-specific value propositions, which led to my efforts catalyzing six-figure revenue growth, including a pivotal partnership with the Green Climate Fund.",
+          "GPCA-STRATEGY": "I collaborated closely with our Research team to enhance the Data Room analytics platform by translating complex market intelligence into actionable business strategies. My systematic approach to identifying inefficiencies in our membership onboarding process led to the development of streamlined workflows that increased conversion rates by 40% and generated over $150K in revenue growth.",
+          "GPCA-ESG": "As ESG funds gained traction, my role became both client-facing and technical, from collaborating with our Research team to update our proprietary Data Room + LP Intelligence platform to leading targeted outreach. This resulted in 28+ new institutional partnerships and a $150K revenue increase. Notably, efforts to amplify ESG thought leadership culminated in onboarding the Green Climate Fund, the world's largest climate fund.",
+          "GPCA-OPERATIONS": "I worked closely with the Executive team to implement robust operational frameworks that enhanced member service delivery and regulatory compliance. I built and maintained comprehensive stakeholder management systems to track bilateral relationships, ensuring consistent follow-through and service excellence.",
+          "GPCA-AI-TECH": "I collaborated closely with our Research team to enhance the Data Room analytics platform by translating complex market intelligence into actionable business strategies. My systematic approach to identifying inefficiencies in our membership onboarding process led to the development of streamlined workflows that increased conversion rates by 40%. This experience demonstrates my ability to uncover business value through process analysis and technology integration.",
+          "GPCA-C-A": "These efforts catalyzed six-figure revenue growth, including onboarding the Green Climate Fund, the world's largest climate fund.",
+          "GPCA-C-B": "This resulted in 28+ new institutional partnerships, including onboarding the Green Climate Fund.",
+          "GPCA-X-A": "My ability to see the \"big picture\" across competing priorities will [be an asset for / prove to be an asset for / equip me to] [ROLE-SPECIFIC OUTCOME].",
+          "GPCA-X-B": "This experience cultivating relationships across the global financial sector positions me to engage with networks and connect emerging needs with high-impact outcomes across [DOMAIN].",
+          "VV-O-A": "My [ability/capacity] to effectively navigate ambiguity is evident from my time leading high-stakes programming at Vital Voices.",
+          "VV-O-B": "My ability to translate institutional value into measurable outcomes is evident in my role at Vital Voices, where I served as Regional Lead for Asia.",
+          "VV-CRISIS": "This included managing a $9M sub-award portfolio, with significant resources allocated to crisis response programming that evacuated over 1,200 Afghan women human rights defenders following the fall of Kabul. From leveraging SafeCity's anonymous digital reporting platform to advancing gender equity in Asian supply chains, I have distilled innovative ideas into measurable impact.",
+          "VV-COMMS": "This included managing a $9M sub-award portfolio, with significant resources allocated to crisis response programming. Notably, I was privileged to contribute to a defining moment for Vital Voices' historic opening of its global headquarters in Washington, D.C. This included securing speaking engagements with international dignitaries and independently crafting talking points for a panel featuring a former U.S. Secretary of State.",
+          "VV-PROGRAM": "This included spearheading winning grant bids which embedded data-driven insights and case studies on emergent resource needs for the institution. This led to the pivotal success of securing and managing a $9M sub-award portfolio. My needs assessment captured overlooked case studies and the latest programmatic data to map out gaps in post-evacuation support. Despite constraints, I identified synergies across our network and negotiated expanded funding parameters, which increased the six-figure program by 11.6%.",
+          "VV-TECH": "From implementing SafeCity's anonymous digital reporting platform across 10 sites to advancing gender equity in Asian supply chains, I have consistently leveraged technology and partnerships to scale impact. This forward-thinking approach demonstrates my ability to distill innovative ideas into measurable outcomes.",
+          "VV-PORT+TECH": "This included securing and managing a $9M sub-award portfolio, with significant resources allocated to crisis response programming that facilitated the evacuation and long-term safety of over 1,200 Afghan women human rights defenders following the fall of Kabul. From implementing SafeCity's GBV reporting software to advancing gender equity in Asian supply chains, I have consistently leveraged technology and partnerships to scale impact.",
+          "VV-X-A": "This forward-thinking approach equips me to [ROLE-SPECIFIC OUTCOME].",
+          "VV-X-B": "This agility, [combined with my Master of Laws from the University of Galway with coursework in EU regulatory policy,] prepares me to [OUTCOME].",
+          "EXEC-FULL": "My experience supporting executive leadership at high-profile global forums is particularly relevant to this role. I represented GPCA at its flagship IFC-backed 2024 Conference, engaging with private capital leadership across its global network. Notably, I was privileged to contribute to a defining moment for Vital Voices—the historic opening of its global headquarters in Washington, D.C., on Embassy Row.",
+          "EXEC-EXT": "This included securing speaking engagements with international dignitaries and independently crafting talking points for a panel featuring a former U.S. Secretary of State."
+        };
+
+        const KICKERS = [
+          { code: "KICK-A", text: "Capital follows conviction. But only when it is made legible through systems that last.", bestFor: "Finance, Impact Investing, Membership, Philanthropy" },
+          { code: "KICK-B", text: "In an era of information abundance, clarity is currency.", bestFor: "Strategy, Research, Data, AI, Tech, Communications" },
+          { code: "KICK-C", text: "If intellectual capital and systemic action operate in distinct spheres, the most pressing human challenges become categorically unaddressable.", bestFor: "Think Tank, Policy, Human Rights, Dream Roles" },
+          { code: "KICK-D", text: "Trust is infrastructure. I build both.", bestFor: "Operations, Client Success, Partnerships" },
+          { code: "KICK-E", text: "This role confronts an existential imperative.", bestFor: "Climate, Sustainability, AI Safety" },
+          { code: "KICK-F", text: "Innovative ideas advance [DOMAIN], but only well-designed platforms can translate data into tangible impact.", bestFor: "Tech, Product, Platform" },
+          { code: "KICK-G", text: "Values don't compromise value. They create it.", bestFor: "ESG, Impact, Purpose-driven" },
+          { code: "KICK-H", text: "The responsibility before us elevates this role beyond merely meeting [targets].", bestFor: "Senior, Vision-driven" }
+        ];
+
+        const SYNTHESIS_PATTERNS = {
+          "PATTERN-A": "[ORG]'s [ethos/mission/approach] reflects this principle in [action/practice]. [SPECIFIC INSIGHT ABOUT ORG]. I am drawn to this role precisely because it operates at this nexus.",
+          "PATTERN-B": "[ORG]'s [ethos/mission] demands a [strategy/partner/foundation] equal to its [vision/ambition]. [INSIGHT]. I am drawn to this role precisely because it operates at this nexus.",
+          "PATTERN-C": "[ORG]'s [mission] to [GOAL] presents a unique [challenge/opportunity]. [INSIGHT]. I am drawn to this role precisely because it operates at this nexus.",
+          "PATTERN-D": "Unprecedented breakthroughs, from [TREND A] to [TREND B], have redefined our understanding of what's possible. This allows [ORG] to [empower/enable] its [TEAM] to [unlock/achieve] [OUTCOME].",
+          "PATTERN-E": "The responsibility before us elevates this role beyond merely meeting [targets]. It [presents an existential imperative / demands a field strategy] as dynamic as the world around it. [VISION STATEMENT]."
+        };
+
+        const RULES = [
+          { rule: "NO EM-DASHES", desc: "Ever. Use commas, periods, or restructure.", severity: "CRITICAL" },
+          { rule: "NO LONG LISTY SENTENCES", desc: "Break compound structures.", severity: "CRITICAL" },
+          { rule: "NEVER START WITH 'At' OR 'When'", desc: "Use alternative constructions.", severity: "HIGH" },
+          { rule: "KICKER MUST BE INDENTED", desc: "Tab + philosophical statement + period.", severity: "CRITICAL" },
+          { rule: "ONE PAGE MAXIMUM", desc: "Ruthlessly cut.", severity: "CRITICAL" }
+        ];
+
+        const SACRED_VOCAB = [
+          "analytical acumen", "systems-thinking fluency", "incisive commercial acumen",
+          "navigate ambiguity", "high-stakes initiatives", "lasting value creation",
+          "seamless service delivery", "nexus", "catalyst", "forward-thinking approach",
+          "intuitive strategist"
+        ];
+
+        const FORBIDDEN_PHRASES = [
+          "I believe...", "I am passionate about...", "I am excited to...",
+          "At [ORG]... (to start)", "When I was...", "Any em-dash (—)"
+        ];
+
+        // JD Analysis
+        const analyzeJD = (jdText) => {
+          const text = jdText.toLowerCase();
+          
+          let role = '';
+          const rolePatterns = [
+            /(?:position|role|title):\s*([^\n]+)/i,
+            /(?:job title|position title):\s*([^\n]+)/i,
+            /^([^\n]+?)(?:\s+at\s+|\s+-\s+)/im
+          ];
+          for (let pattern of rolePatterns) {
+            const match = jdText.match(pattern);
+            if (match) {
+              role = match[1].trim();
+              break;
+            }
+          }
+          if (!role) {
+            const lines = jdText.split('\n').filter(l => l.trim().length > 0);
+            role = lines[0]?.trim().substring(0, 80) || '';
+          }
+
+          let org = '';
+          const orgPatterns = [
+            /(?:company|organization|org):\s*([^\n]+)/i,
+            /(?:at|join|with)\s+([A-Z][A-Za-z0-9\s&.]+?)(?:\s+is\s+|\s+in\s+|\.|,)/,
+            /([A-Z][A-Za-z0-9\s&.]{2,30})\s+is\s+(?:seeking|looking|hiring)/
+          ];
+          for (let pattern of orgPatterns) {
+            const match = jdText.match(pattern);
+            if (match) {
+              org = match[1].trim();
+              break;
+            }
+          }
+
+          const sectorKeywords = {
+            'Climate/ESG': ['climate', 'esg', 'sustainability', 'environmental', 'carbon', 'renewable', 'green energy', 'net zero', 'decarbonization', 'clean energy'],
+            'AI/Tech': ['ai', 'artificial intelligence', 'machine learning', 'ml', 'llm', 'neural', 'algorithm', 'data science', 'software', 'engineering', 'platform'],
+            'Partnerships/BD': ['partnerships', 'business development', 'bd', 'strategic partnerships', 'alliance', 'channel', 'ecosystem', 'stakeholder engagement'],
+            'Program Mgmt': ['program manager', 'program management', 'project manager', 'pmo', 'agile', 'scrum', 'delivery', 'implementation'],
+            'Operations': ['operations', 'ops', 'operational', 'process', 'efficiency', 'logistics', 'supply chain', 'execution'],
+            'Think Tank/Policy': ['policy', 'think tank', 'research institute', 'public policy', 'advocacy', 'regulatory', 'government affairs', 'legislation'],
+            'Human Rights': ['human rights', 'humanitarian', 'refugee', 'asylum', 'democracy', 'freedom', 'civil society', 'civil liberties', 'justice'],
+            'Impact Investing': ['impact investing', 'social impact', 'impact fund', 'blended finance', 'impact measurement', 'sri', 'esg investing', 'social finance'],
+            'Communications': ['communications', 'comms', 'public relations', 'pr', 'media', 'content', 'storytelling', 'brand', 'marketing'],
+            'Membership': ['membership', 'member services', 'association', 'trade association', 'professional organization', 'community'],
+            'Research/Strategy': ['research', 'strategy', 'strategic', 'analysis', 'insights', 'market research', 'competitive intelligence', 'consulting'],
+            'Fintech': ['fintech', 'financial technology', 'payments', 'blockchain', 'crypto', 'defi', 'banking technology', 'digital banking'],
+            'Grants/Dev': ['grants', 'development', 'fundraising', 'donor', 'philanthropy', 'foundation', 'grantmaking', 'resource development']
+          };
+
+          let bestSector = 'Partnerships/BD';
+          let maxScore = 0;
+
+          Object.entries(sectorKeywords).forEach(([sector, keywords]) => {
+            let score = 0;
+            keywords.forEach(keyword => {
+              const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+              const matches = text.match(regex);
+              if (matches) score += matches.length;
+            });
+            if (score > maxScore) {
+              maxScore = score;
+              bestSector = sector;
+            }
+          });
+
+          let orgInsight = '';
+          const insightPatterns = [
+            /(?:mission|vision|purpose|about us):\s*([^.!?]+[.!?])/i,
+            /(?:we|our organization|our company)\s+(is|are)\s+([^.!?]+[.!?])/i,
+            /(?:our mission is to|we aim to|we work to|we strive to)\s+([^.!?]+[.!?])/i
+          ];
+          for (let pattern of insightPatterns) {
+            const match = jdText.match(pattern);
+            if (match) {
+              orgInsight = match[1] || match[2] || match[0];
+              orgInsight = orgInsight.trim().substring(0, 200);
+              break;
+            }
+          }
+
+          return {
+            role,
+            org,
+            sector: bestSector,
+            orgInsight,
+            confidence: maxScore > 3 ? 'HIGH' : maxScore > 1 ? 'MEDIUM' : 'LOW'
+          };
+        };
+
+        function ArcAthenaCoverSystem() {
+          const [activeTab, setActiveTab] = useState('architect');
+          const [selectedSector, setSelectedSector] = useState(null);
+          const [searchQuery, setSearchQuery] = useState('');
+          const [assembledLetter, setAssembledLetter] = useState('');
+          const [jdText, setJdText] = useState('');
+          const [jdAnalysis, setJdAnalysis] = useState(null);
+          const [customizations, setCustomizations] = useState({
+            role: '',
+            org: '',
+            orgInsight: ''
+          });
+
+          const filteredSectors = useMemo(() => {
+            if (!searchQuery) return SECTOR_ROUTING;
+            return SECTOR_ROUTING.filter(s => 
+              s.sector.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+          }, [searchQuery]);
+
+          const handleJDAnalysis = () => {
+            if (!jdText.trim()) {
+              alert('Paste a JD first.');
+              return;
+            }
+
+            const analysis = analyzeJD(jdText);
+            setJdAnalysis(analysis);
+            setSelectedSector(analysis.sector);
+            setCustomizations({
+              role: analysis.role,
+              org: analysis.org,
+              orgInsight: analysis.orgInsight
+            });
+          };
+
+          const currentRouting = useMemo(() => {
+            if (!selectedSector) return null;
+            return SECTOR_ROUTING.find(s => s.sector === selectedSector);
+          }, [selectedSector]);
+
+          const assembleLetter = () => {
+            if (!currentRouting || !customizations.role || !customizations.org) {
+              alert('Select sector and fill Role + Org fields.');
+              return;
+            }
+
+            const r = currentRouting;
+            let letter = '';
+
+            letter += SENTENCE_ANCHORS[r.opening]
+              .replace('[ROLE]', customizations.role)
+              .replace('[ORG]', customizations.org) + '\n\n';
+
+            letter += SENTENCE_ANCHORS[r.thesis] + ' ';
+            if (r.bridge && r.bridge !== 'None') {
+              letter += SENTENCE_ANCHORS[r.bridge];
+            }
+            letter += '\n\n';
+
+            letter += SENTENCE_ANCHORS[r.gpcaOpen] + ' ';
+            letter += SENTENCE_ANCHORS[r.gpcaBody] + ' ';
+            letter += SENTENCE_ANCHORS[r.gpcaClose] + ' ';
+            letter += SENTENCE_ANCHORS[r.gpcaXfer] + '\n\n';
+
+            letter += SENTENCE_ANCHORS[r.vvOpen] + ' ';
+            letter += SENTENCE_ANCHORS[r.vvBody] + ' ';
+            letter += SENTENCE_ANCHORS[r.vvXfer] + '\n\n';
+
+            if (r.execPara === 'Yes') {
+              letter += SENTENCE_ANCHORS['EXEC-FULL'] + ' ';
+              letter += SENTENCE_ANCHORS['EXEC-EXT'] + '\n\n';
+            }
+
+            const kickerObj = KICKERS.find(k => k.code === r.kicker);
+            if (kickerObj) {
+              letter += '\t' + kickerObj.text + '\n\n';
+            }
+
+            let synthesis = SYNTHESIS_PATTERNS[r.synthesis] || SYNTHESIS_PATTERNS['PATTERN-A'];
+            synthesis = synthesis.replace(/\[ORG\]/g, customizations.org);
+            if (customizations.orgInsight) {
+              synthesis = synthesis.replace('[SPECIFIC INSIGHT ABOUT ORG]', customizations.orgInsight);
+              synthesis = synthesis.replace('[INSIGHT]', customizations.orgInsight);
+            }
+            letter += synthesis + '\n\n';
+
+            letter += `In me, ${customizations.org} will find an intuitive strategist committed to advancing ${customizations.org}'s mission. Thank you for considering my application. I look forward to discussing my candidacy in further detail.`;
+
+            setAssembledLetter(letter);
+            setActiveTab('assembled');
+          };
+
+          const copyToClipboard = () => {
+            navigator.clipboard.writeText(assembledLetter);
+          };
+
+          const downloadLetter = () => {
+            const blob = new Blob([assembledLetter], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${customizations.org}_${customizations.role}_Cover_Letter.txt`;
+            a.click();
+          };
+
+          return (
+            <div className="min-h-screen bg-black text-white font-sans">
+              {/* HEADER */}
+              <div className="border-b border-zinc-800 bg-zinc-950">
+                <div className="max-w-7xl mx-auto px-8 py-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h1 className="text-2xl font-light tracking-wider">ARC-ATHENA</h1>
+                      <p className="text-xs text-zinc-500 mt-1 tracking-wide">COVER LETTER EXPERT SYSTEM v2.0</p>
+                    </div>
+                    <div className="flex gap-2 text-xs">
+                      <div className="px-3 py-1 bg-zinc-900 border border-zinc-800 rounded">300+ APPLICATIONS</div>
+                      <div className="px-3 py-1 bg-zinc-900 border border-zinc-800 rounded">FORENSICALLY EXTRACTED</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* MAIN NAV */}
+              <div className="border-b border-zinc-900 bg-black sticky top-0 z-50">
+                <div className="max-w-7xl mx-auto px-8">
+                  <div className="flex gap-6">
+                    {[
+                      { id: 'architect', label: 'ARCHITECT', icon: Target },
+                      { id: 'arsenal', label: 'ARSENAL', icon: Zap },
+                      { id: 'rules', label: 'INVIOLABLE CODE', icon: Lock },
+                      { id: 'assembled', label: 'ASSEMBLED', icon: FileText }
+                    ].map(tab => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`flex items-center gap-2 px-4 py-4 text-xs tracking-wider border-b-2 transition-all ${
+                          activeTab === tab.id
+                            ? 'border-white text-white'
+                            : 'border-transparent text-zinc-600 hover:text-zinc-400'
+                        }`}
+                      >
+                        {React.createElement(tab.icon, { size: 14 })}
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* CONTENT */}
+              <div className="max-w-7xl mx-auto px-8 py-8">
+                
+                {activeTab === 'architect' && (
+                  <div className="space-y-8">
+                    {/* JD INTELLIGENCE ENGINE */}
+                    <div className="border border-zinc-800 bg-zinc-950 p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h2 className="text-sm tracking-widest text-zinc-400">JD INTELLIGENCE ENGINE</h2>
+                          <p className="text-xs text-zinc-600 mt-1">Paste job description. Get instant analysis and routing.</p>
+                        </div>
+                        <Sparkles size={20} className="text-zinc-700" />
+                      </div>
+
+                      <textarea
+                        value={jdText}
+                        onChange={(e) => setJdText(e.target.value)}
+                        placeholder="Paste the full job description here..."
+                        rows={8}
+                        className="w-full bg-black border border-zinc-800 rounded px-4 py-3 text-sm text-white placeholder-zinc-700 focus:outline-none focus:border-zinc-700 resize-none mb-4 font-mono"
+                      />
+
+                      <button
+                        onClick={handleJDAnalysis}
+                        disabled={!jdText.trim()}
+                        className="w-full bg-white text-black py-4 text-sm tracking-wider font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-zinc-200 transition-all flex items-center justify-center gap-2"
+                      >
+                        <Play size={16} />
+                        ANALYZE & AUTO-POPULATE
+                      </button>
+
+                      {jdAnalysis && (
+                        <div className="mt-6 pt-6 border-t border-zinc-800">
+                          <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xs tracking-widest text-zinc-400">ANALYSIS RESULTS</h3>
+                            <div className={`px-3 py-1 text-xs font-mono rounded ${
+                              jdAnalysis.confidence === 'HIGH' 
+                                ? 'bg-green-950/30 text-green-500 border border-green-900/50'
+                                : jdAnalysis.confidence === 'MEDIUM'
+                                ? 'bg-yellow-950/30 text-yellow-500 border border-yellow-900/50'
+                                : 'bg-red-950/30 text-red-500 border border-red-900/50'
+                            }`}>
+                              {jdAnalysis.confidence} CONFIDENCE
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4 text-xs">
+                            <div className="bg-black border border-zinc-800 p-4 rounded">
+                              <div className="text-zinc-600 mb-2">DETECTED SECTOR</div>
+                              <div className="text-white font-medium">{jdAnalysis.sector}</div>
+                            </div>
+                            <div className="bg-black border border-zinc-800 p-4 rounded">
+                              <div className="text-zinc-600 mb-2">EXTRACTED ROLE</div>
+                              <div className="text-white font-medium">{jdAnalysis.role || 'Not detected'}</div>
+                            </div>
+                            <div className="bg-black border border-zinc-800 p-4 rounded col-span-2">
+                              <div className="text-zinc-600 mb-2">EXTRACTED ORG</div>
+                              <div className="text-white font-medium">{jdAnalysis.org || 'Not detected'}</div>
+                            </div>
+                            {jdAnalysis.orgInsight && (
+                              <div className="bg-black border border-zinc-800 p-4 rounded col-span-2">
+                                <div className="text-zinc-600 mb-2">DETECTED MISSION/INSIGHT</div>
+                                <div className="text-white font-medium text-xs leading-relaxed">{jdAnalysis.orgInsight}</div>
+                              </div>
+                            )}
+                          </div>
+
+                          <p className="text-xs text-zinc-600 mt-4 italic">
+                            Fields auto-populated below. Review and refine before assembling.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Sector Selection */}
+                    <div>
+                      <div className="mb-4 flex items-center justify-between">
+                        <h2 className="text-sm tracking-widest text-zinc-400">SELECT SECTOR</h2>
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={16} />
+                          <input
+                            type="text"
+                            placeholder="Search sectors..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="bg-zinc-950 border border-zinc-800 rounded px-10 py-2 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-700"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-4 gap-3">
+                        {filteredSectors.map(sector => (
+                          <button
+                            key={sector.sector}
+                            onClick={() => setSelectedSector(sector.sector)}
+                            className={`p-4 text-left text-sm border transition-all ${
+                              selectedSector === sector.sector
+                                ? 'bg-white text-black border-white'
+                                : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700'
+                            }`}
+                          >
+                            {sector.sector}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Customization Inputs */}
+                    {selectedSector && (
+                      <div className="border border-zinc-800 bg-zinc-950 p-6">
+                        <h3 className="text-xs tracking-widest text-zinc-400 mb-4">CUSTOMIZATION</h3>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="text-xs text-zinc-500 mb-2 block">ROLE TITLE</label>
+                            <input
+                              type="text"
+                              value={customizations.role}
+                              onChange={(e) => setCustomizations({...customizations, role: e.target.value})}
+                              className="w-full bg-black border border-zinc-800 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-700"
+                              placeholder="e.g., Senior Program Manager"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-zinc-500 mb-2 block">ORGANIZATION</label>
+                            <input
+                              type="text"
+                              value={customizations.org}
+                              onChange={(e) => setCustomizations({...customizations, org: e.target.value})}
+                              className="w-full bg-black border border-zinc-800 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-700"
+                              placeholder="e.g., OpenAI"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs text-zinc-500 mb-2 block">ORG INSIGHT (1-2 sentences)</label>
+                            <textarea
+                              value={customizations.orgInsight}
+                              onChange={(e) => setCustomizations({...customizations, orgInsight: e.target.value})}
+                              rows={3}
+                              className="w-full bg-black border border-zinc-800 rounded px-4 py-3 text-sm text-white focus:outline-none focus:border-zinc-700 resize-none"
+                              placeholder="e.g., OpenAI's commitment to safety-first AI development..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Routing Preview */}
+                    {currentRouting && (
+                      <div className="border border-zinc-800 bg-zinc-950 p-6">
+                        <h3 className="text-xs tracking-widest text-zinc-400 mb-4">ROUTING CONFIGURATION</h3>
+                        <div className="grid grid-cols-2 gap-4 text-xs mb-6">
+                          <div className="space-y-2">
+                            {[
+                              ['Opening', currentRouting.opening],
+                              ['Thesis', currentRouting.thesis],
+                              ['Bridge', currentRouting.bridge],
+                              ['GPCA Body', currentRouting.gpcaBody],
+                              ['VV Body', currentRouting.vvBody]
+                            ].map(([label, value]) => (
+                              <div key={label} className="flex justify-between py-2 border-b border-zinc-900">
+                                <span className="text-zinc-600">{label}:</span>
+                                <span className="text-white font-mono">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="space-y-2">
+                            {[
+                              ['Exec Para', currentRouting.execPara],
+                              ['Kicker', currentRouting.kicker],
+                              ['Synthesis', currentRouting.synthesis]
+                            ].map(([label, value]) => (
+                              <div key={label} className="flex justify-between py-2 border-b border-zinc-900">
+                                <span className="text-zinc-600">{label}:</span>
+                                <span className="text-white font-mono">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={assembleLetter}
+                          disabled={!customizations.role || !customizations.org}
+                          className="w-full bg-white text-black py-4 text-sm tracking-wider font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-zinc-200 transition-all flex items-center justify-center gap-2"
+                        >
+                          <Sparkles size={16} />
+                          ASSEMBLE LETTER
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeTab === 'arsenal' && (
+                  <div className="space-y-8">
+                    <div>
+                      <h2 className="text-sm tracking-widest text-zinc-400 mb-4">THE KICKER BANK</h2>
+                      <div className="space-y-3">
+                        {KICKERS.map(kicker => (
+                          <div key={kicker.code} className="border border-zinc-800 bg-zinc-950 p-4 hover:border-zinc-700 transition-all">
+                            <div className="flex items-start justify-between mb-2">
+                              <code className="text-xs text-zinc-500 font-mono">{kicker.code}</code>
+                              <button className="text-zinc-600 hover:text-white" onClick={() => navigator.clipboard.writeText(kicker.text)}>
+                                <Copy size={14} />
+                              </button>
+                            </div>
+                            <p className="text-sm leading-relaxed mb-2">{kicker.text}</p>
+                            <p className="text-xs text-zinc-600">{kicker.bestFor}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h2 className="text-sm tracking-widest text-zinc-400 mb-4">SACRED VOCABULARY</h2>
+                      <div className="border border-zinc-800 bg-zinc-950 p-4">
+                        <div className="flex flex-wrap gap-2">
+                          {SACRED_VOCAB.map(phrase => (
+                            <span key={phrase} className="px-3 py-1 bg-black border border-zinc-800 text-xs text-zinc-400 rounded">
+                              {phrase}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h2 className="text-sm tracking-widest text-zinc-400 mb-4">FORBIDDEN PHRASES</h2>
+                      <div className="border border-zinc-800 bg-zinc-950 p-4">
+                        <div className="flex flex-wrap gap-2">
+                          {FORBIDDEN_PHRASES.map(phrase => (
+                            <span key={phrase} className="px-3 py-1 bg-red-950/30 border border-red-900/50 text-xs text-red-500 rounded line-through">
+                              {phrase}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'rules' && (
+                  <div>
+                    <h2 className="text-sm tracking-widest text-zinc-400 mb-6">THE INVIOLABLE CODE</h2>
+                    <div className="space-y-4">
+                      {RULES.map((rule, idx) => (
+                        <div key={idx} className="border border-zinc-800 bg-zinc-950 p-6 flex items-start gap-4">
+                          <div className={`px-3 py-1 text-xs font-mono ${
+                            rule.severity === 'CRITICAL' 
+                              ? 'bg-red-950/30 text-red-500 border border-red-900/50'
+                              : 'bg-yellow-950/30 text-yellow-500 border border-yellow-900/50'
+                          } rounded`}>
+                            {rule.severity}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-sm font-medium mb-2">{rule.rule}</h3>
+                            <p className="text-sm text-zinc-500">{rule.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-8 border border-zinc-800 bg-zinc-950 p-6">
+                      <h3 className="text-xs tracking-widest text-zinc-400 mb-4">THE 10% RULE</h3>
+                      <p className="text-sm text-zinc-400 leading-relaxed mb-4">
+                        90% of text comes from anchors. Only customize:
+                      </p>
+                      <ul className="space-y-2 text-sm text-zinc-500">
+                        <li className="flex items-start gap-2">
+                          <ChevronRight size={16} className="mt-0.5" />
+                          <span>The FINAL CLAUSE of 2-3 sentences (transfer sentences)</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <ChevronRight size={16} className="mt-0.5" />
+                          <span>The [VARIABLES] in anchor sentences</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <ChevronRight size={16} className="mt-0.5" />
+                          <span>1-2 JD keywords woven naturally into existing sentences</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <ChevronRight size={16} className="mt-0.5" />
+                          <span>The Synthesis paragraph (org-specific)</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'assembled' && (
+                  <div>
+                    {assembledLetter ? (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-sm tracking-widest text-zinc-400">ASSEMBLED LETTER</h2>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={copyToClipboard}
+                              className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-xs tracking-wider hover:bg-zinc-800 transition-all flex items-center gap-2"
+                            >
+                              <Copy size={14} />
+                              COPY
+                            </button>
+                            <button
+                              onClick={downloadLetter}
+                              className="px-4 py-2 bg-white text-black text-xs tracking-wider hover:bg-zinc-200 transition-all flex items-center gap-2"
+                            >
+                              <Download size={14} />
+                              DOWNLOAD
+                            </button>
+                            <button
+                              onClick={() => setAssembledLetter('')}
+                              className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-xs tracking-wider hover:bg-zinc-800 transition-all flex items-center gap-2"
+                            >
+                              <RotateCcw size={14} />
+                              RESET
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="border border-zinc-800 bg-zinc-950 p-8">
+                          <pre className="text-sm leading-relaxed text-zinc-300 whitespace-pre-wrap font-sans">
+                            {assembledLetter}
+                          </pre>
+                        </div>
+
+                        <div className="border border-zinc-800 bg-zinc-950 p-6">
+                          <h3 className="text-xs tracking-widest text-zinc-400 mb-4">QUALITY CHECKLIST</h3>
+                          <div className="space-y-2 text-sm">
+                            {[
+                              "One page maximum",
+                              "No em-dashes present",
+                              "Kicker is indented",
+                              "No sentences start with 'At' or 'When'",
+                              "Sacred vocabulary included"
+                            ].map((item, idx) => (
+                              <div key={idx} className="flex items-center gap-2 text-zinc-500">
+                                <CheckCircle2 size={16} className="text-zinc-700" />
+                                {item}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="border border-zinc-800 bg-zinc-950 p-12 text-center">
+                        <FileText size={48} className="mx-auto mb-4 text-zinc-800" />
+                        <p className="text-zinc-600 text-sm">No letter assembled yet. Go to ARCHITECT to build one.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* FOOTER */}
+              <div className="border-t border-zinc-900 bg-black mt-12">
+                <div className="max-w-7xl mx-auto px-8 py-6">
+                  <p className="text-xs text-zinc-600 tracking-wide">
+                    ARC-ATHENA PROTOCOL v2.0 | DECEMBER 2025 | BUILT ON 300+ APPLICATIONS | FORENSICALLY EXTRACTED
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ArcAthenaCoverSystem />);
+    </script>
+</body>
+</html>
