@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: arc-athena-cover-system
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+    healthCheckPath: /

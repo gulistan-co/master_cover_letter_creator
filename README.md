@@ -2,6 +2,19 @@
 
 Built on 300+ applications. Forensically extracted.
 
+## 📡 Deployment status
+
+This repository does **not** deploy automatically from this workspace. To make it live you must run one of the deployment flows below (GitHub Pages for the static front end, Render for the Node/AI backend) and point the UI at your hosted API via `window.API_BASE_URL` if you separate them. Until you do, everything runs locally only.
+
+## 💾 Saving this exact version
+
+Need a local copy of the current UI and instructions?
+
+- **From the app UI:** In the Arc Athena header, click **Save index.html** and **Save README** to download the exact files currently served.
+- **From the repo:** Run `curl -O https://raw.githubusercontent.com/YOUR-USERNAME/arc-athena/main/index.html` and the same for `README.md`, or clone the repo with `git clone ...` to keep the snapshot.
+- **One-command archive:** Run `npm run save` to produce `arc-athena-snapshot.tar.gz` from your current checkout (excludes `node_modules`).
+- **Full cheat sheet:** See [`SAVING.md`](SAVING.md) for six save/backup options (UI buttons, local server curl, GitHub raw, git clone + tag, npm archive, manual zip).
+
 ## 🚀 Quick Deploy to GitHub Pages (5 minutes)
 
 ### Step 1: Create GitHub Repository
@@ -46,6 +59,18 @@ Your app will be live at:
 https://YOUR-USERNAME.github.io/arc-athena/
 ```
 
+## 🚀 One-Click Backend Deploy on Render
+
+Use Render to host the Node backend (serves the static front end and the AI endpoints).
+
+1. Create a free Render account at https://render.com.
+2. Click **New +** → **Blueprint** and point it to your GitHub repo containing this project.
+3. Render will auto-detect `render.yaml`; accept the defaults (Node web service, `npm install`, `npm start`).
+4. In the service settings, add an environment variable `OPENAI_API_KEY` with your key.
+5. Deploy. Render will build and serve `index.html` from the same service at your generated URL.
+
+> Tip: If you want the front end on GitHub Pages and the backend on Render, deploy Pages first, then set `window.API_BASE_URL = 'https://your-render-service.onrender.com'` near the top of `index.html` so the UI calls the remote API.
+
 ## 📝 Embed in Notion
 
 Once deployed:
@@ -62,6 +87,7 @@ Once deployed:
 - Auto-extracts: Role, Organization, Sector, Mission
 - Confidence scoring (HIGH/MEDIUM/LOW)
 - 130+ sector keywords across 13 categories
+- Optional OpenAI-backed JD parsing via `/api/jd-analyze` with fallback to the local keyword engine
 
 ### Complete Module System
 - **13 Sectors**: Climate/ESG, AI/Tech, Partnerships, Program Mgmt, Operations, Think Tank, Human Rights, Impact Investing, Communications, Membership, Research/Strategy, Fintech, Grants/Dev
@@ -112,6 +138,13 @@ Once deployed:
 - One-click copy/download
 - Mobile responsive
 - Notion-embeddable
+- Copilot tab for in-app ChatGPT constrained by Arc Athena rules
+
+## 🖥 Local Server
+
+1. Set `OPENAI_API_KEY` in your environment for AI-backed features.
+2. Run `npm install` once.
+3. Start the backend with `npm start` and open `index.html` in the same root (served statically by `server.js`).
 
 ## 📄 License
 
