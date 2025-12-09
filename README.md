@@ -6,15 +6,6 @@ Built on 300+ applications. Forensically extracted.
 
 This repository does **not** deploy automatically from this workspace. To make it live you must run one of the deployment flows below (GitHub Pages for the static front end, Render for the Node/AI backend) and point the UI at your hosted API via `window.API_BASE_URL` if you separate them. Until you do, everything runs locally only.
 
-## 💾 Saving this exact version
-
-Need a local copy of the current UI and instructions?
-
-- **From the app UI:** In the Arc Athena header, click **Save index.html** and **Save README** to download the exact files currently served.
-- **From the repo:** Run `curl -O https://raw.githubusercontent.com/YOUR-USERNAME/arc-athena/main/index.html` and the same for `README.md`, or clone the repo with `git clone ...` to keep the snapshot.
-- **One-command archive:** Run `npm run save` to produce `arc-athena-snapshot.tar.gz` from your current checkout (excludes `node_modules`).
-- **Full cheat sheet:** See [`SAVING.md`](SAVING.md) for six save/backup options (UI buttons, local server curl, GitHub raw, git clone + tag, npm archive, manual zip).
-
 ## 🚀 Quick Deploy to GitHub Pages (5 minutes)
 
 ### Step 1: Create GitHub Repository
