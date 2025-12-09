@@ -480,6 +480,22 @@
             a.click();
           };
 
+          const downloadAsset = async (path, filename) => {
+            try {
+              const response = await fetch(path, { cache: 'no-cache' });
+              if (!response.ok) throw new Error('Network response was not ok');
+              const blob = await response.blob();
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = filename;
+              a.click();
+              URL.revokeObjectURL(url);
+            } catch (error) {
+              alert('Unable to download asset from this host. Try saving the file directly from the repository.');
+            }
+          };
+
           return (
             <div className="min-h-screen text-slate-100 font-sans relative overflow-hidden">
               <div className="pointer-events-none absolute inset-0 opacity-50" style={{backgroundImage:'radial-gradient(circle at 10% 20%, rgba(116,153,255,0.04), transparent 25%), radial-gradient(circle at 90% 10%, rgba(112,255,214,0.05), transparent 20%), linear-gradient(140deg, rgba(255,255,255,0.03), transparent 45%, rgba(255,255,255,0.02))'}}></div>
